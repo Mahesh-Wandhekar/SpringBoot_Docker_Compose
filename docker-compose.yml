@@ -1,0 +1,28 @@
+version: "3"
+services:
+  application:
+    image: spring-boot-mysql-app
+    ports:
+      - "8080:8080"
+    networks:
+      - springboot-db-net
+    depends_on:
+      - oracle
+    volumes:
+      - /data/springboot-app
+
+  oracle:
+    image: oracle/database:19.3.0-se2  # Use the appropriate Oracle image
+    networks:
+      - springboot-db-net
+    environment:
+      - ORACLE_PWD=system  # Set the Oracle password
+      - ORACLE_SID=ORCLCDB
+    ports:
+      - "1521:1521"  # Expose Oracle's default port
+      - "5500:5500"  # Optional: for Oracle Enterprise Manager
+    volumes:
+      - /data/oracle
+
+networks:
+  springboot-db-net:
